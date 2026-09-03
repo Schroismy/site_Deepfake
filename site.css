@@ -1,0 +1,227 @@
+/* ═════════════════════════════════════════════════════════════════════════════
+   FAKENEWS - CSS GLOBAL COMPARTILHADO
+   Reset, Header, Footer, Variáveis
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* RESET E CONFIGURAÇÕES GLOBAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-principal: #0066ff;
+    --cor-secundaria: #00d4ff;
+    --cor-sucesso: #00ff88;
+    --cor-perigo: #ff3366;
+    --cor-fundo: #0a0a0a;
+    --cor-fundo-2: #111111;
+    --cor-texto: #ffffff;
+    --cor-texto-secundaria: #b0b0b0;
+    --sombra-neon: 0 0 20px rgba(0, 102, 255, 0.4);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   HEADER / NAVEGAÇÃO (Aparece em todas as páginas)
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo_nav {
+    font-size: 24px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    cursor: pointer;
+}
+
+.menu_links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+}
+
+.menu_links a {
+    color: var(--cor-texto-secundaria);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.menu_links a:hover {
+    color: var(--cor-secundaria);
+    text-shadow: 0 0 10px var(--cor-secundaria);
+}
+
+.menu_toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu_toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--cor-secundaria);
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   FOOTER (Aparece em todas as páginas)
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+footer {
+    width: 100%;
+    padding: 60px 50px;
+    background: #000000;
+    border-top: 1px solid rgba(0, 102, 255, 0.2);
+    text-align: center;
+    color: #707070;
+}
+
+.footer_content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer_links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+.footer_links a {
+    color: #707070;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.footer_links a:hover {
+    color: var(--cor-secundaria);
+    text-shadow: 0 0 10px var(--cor-secundaria);
+}
+
+.footer_bottom {
+    font-size: 11px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(0, 102, 255, 0.15);
+    color: #505050;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   RESPONSIVO - TABLET (max-width: 1024px)
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    nav {
+        padding: 15px 30px;
+    }
+
+    .menu_links {
+        gap: 20px;
+    }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   RESPONSIVO - TABLET MÉDIO (max-width: 768px)
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+
+    /* MENU MOBILE */
+    .menu_toggle {
+        display: flex;
+    }
+
+    .menu_links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: rgba(10, 10, 10, 0.98);
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .menu_links.active {
+        display: flex;
+    }
+
+    footer {
+        padding: 40px 20px;
+    }
+
+    .footer_links {
+        gap: 15px;
+        flex-direction: column;
+    }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   RESPONSIVO - MOBILE (max-width: 480px)
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+    nav {
+        padding: 12px 15px;
+    }
+
+    .logo_nav {
+        font-size: 20px;
+    }
+
+    .footer_links {
+        gap: 10px;
+    }
+}
+
+

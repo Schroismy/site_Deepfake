@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Plataforma para verificar se uma imagem é um deepfake ou é real">
+    <meta name="theme-color" content="#0066ff">
+    
+    <title>FAKENEWS - Verificador de Deepfakes | Verdade ou Farsa?</title>
+
+    <!--
+    ========================================
+    INSTRUÇÕES DE USO:
+    ========================================
+    1. Coloque o arquivo "fundo-hero.png" na MESMA PASTA que este arquivo HTML
+    2. Abra este arquivo no navegador
+    3. A imagem "VERDADE OU FARSA" aparecerá como fundo da página inicial
+    
+    Se a imagem não aparecer:
+    - Verifique se o nome do arquivo está correto
+    - Verifique se está na mesma pasta
+    - Tente abrir com um servidor local (Python, Live Server, etc)
+    
+    Para usar com um servidor Python:
+    python -m http.server 8000
+    Depois acesse: http://localhost:8000
+    ========================================
+    -->
+
+    <style>
+        /* ============================================
+           RESET E CONFIGURAÇÕES GLOBAIS
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cor-principal: #0066ff;
+            --cor-secundaria: #00d4ff;
+            --cor-sucesso: #00ff88;
+            --cor-perigo: #ff3366;
+            --cor-fundo: #0a0a0a;
+            --cor-fundo-2: #111111;
+            --cor-texto: #ffffff;
+            --cor-texto-secundaria: #b0b0b0;
+            --sombra-neon: 0 0 20px rgba(0, 102, 255, 0.4);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           HEADER E NAVEGAÇÃO
+           ============================================ */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo_nav {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .menu_links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .menu_links a {
+            color: var(--cor-texto-secundaria);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .menu_links a:hover {
+            color: var(--cor-secundaria);
+            text-shadow: 0 0 10px var(--cor-secundaria);
+        }
+
+        .menu_toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu_toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--cor-secundaria);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        /* ============================================
+           SEÇÃO HERO - COM IMAGEM DE FUNDO
+           ============================================ */
+        .container_hero {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+
+        /* Background com imagem "VERDADE OU FARSA" */
+        .container_hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('C:\\Users\\Schroeder\\Downloads\\deepfake_fakenes.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -2;
+        }
+
+        /* Overlay para melhor legibilidade */
+        .container_hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(10, 10, 10, 0.3) 0%, rgba(10, 10, 10, 0.7) 100%);
+            z-index: -1;
+        }
+
+        /* Conteúdo principal com destaque */
+        .hero_content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 102, 255, 0.3),
+                        inset 0 0 50px rgba(0, 212, 255, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo_image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 30px;
+            animation: slideDown 0.8s ease-out;
+            filter: drop-shadow(0 0 20px var(--cor-principal));
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero_title {
+            font-size: clamp(36px, 10vw, 72px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
+        }
+
+        .hero_subtitle {
+            font-size: clamp(16px, 4vw, 24px);
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: var(--cor-texto-secundaria);
+            line-height: 1.8;
+        }
+
+        .hero_highlight {
+            color: var(--cor-secundaria);
+            font-weight: 600;
+        }
+
+        .buttons_container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .btn {
+            padding: 16px 45px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            min-width: 220px;
+        }
+
+        .btn_primary {
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            color: var(--cor-texto);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .btn_primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 102, 255, 0.6);
+        }
+
+        .btn_secondary {
+            background: transparent;
+            color: var(--cor-secundaria);
+            border: 2px solid var(--cor-secundaria);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn_secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .scroll_indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 24px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ============================================
+           SEÇÃO FEATURES
+           ============================================ */
+        .features_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: var(--cor-fundo-2);
+            border-top: 1px solid rgba(0, 102, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .section_title {
+            text-align: center;
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .features_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature_card {
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            padding: 40px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature_card:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--cor-secundaria);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 102, 255, 0.2);
+        }
+
+        .feature_icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature_title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--cor-texto);
+        }
+
+        .feature_description {
+            font-size: 14px;
+            color: var(--cor-texto-secundaria);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           SEÇÃO UPLOAD
+           ============================================ */
+        .upload_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: var(--cor-fundo);
+        }
+
+        .upload_container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload_box {
+            border: 2px dashed var(--cor-principal);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            background: rgba(0, 102, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .upload_box:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--cor-secundaria);
+            box-shadow: var(--sombra-neon);
+        }
+
+        .upload_icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .upload_text {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .upload_hint {
+            font-size: 14px;
+            color: var(--cor-texto-secundaria);
+            margin-bottom: 20px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file_input_btn {
+            background: var(--cor-principal);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .file_input_btn:hover {
+            background: var(--cor-secundaria);
+            transform: scale(1.05);
+        }
+
+        .preview_area {
+            margin-top: 30px;
+        }
+
+        .preview_image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 102, 255, 0.3);
+        }
+
+        .analyze_btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .analyze_btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.4);
+        }
+
+        .analyze_btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================
+           SEÇÃO RESULTADOS
+           ============================================ */
+        .results_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: var(--cor-fundo-2);
+            display: none;
+        }
+
+        .results_section.active {
+            display: block;
+        }
+
+        .result_card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0, 102, 255, 0.05);
+            border: 2px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .result_header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result_badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge_fake {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--cor-perigo);
+            border: 1px solid var(--cor-perigo);
+        }
+
+        .badge_real {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--cor-sucesso);
+            border: 1px solid var(--cor-sucesso);
+        }
+
+        .result_confidence {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result_message {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--cor-texto);
+        }
+
+        .result_details {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .detail_item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .detail_item:last-child {
+            border-bottom: none;
+        }
+
+        .detail_label {
+            color: var(--cor-texto-secundaria);
+            font-weight: 600;
+        }
+
+        .detail_value {
+            color: var(--cor-secundaria);
+            font-weight: 700;
+        }
+
+        .confidence_bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 102, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .confidence_fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+            transition: width 1s ease-out;
+        }
+
+        .new_analysis_btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--cor-principal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .new_analysis_btn:hover {
+            background: var(--cor-secundaria);
+            transform: translateY(-3px);
+        }
+
+        /* ============================================
+           SEÇÃO SOBRE
+           ============================================ */
+        .about_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: var(--cor-fundo);
+        }
+
+        .about_content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about_text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--cor-texto-secundaria);
+            margin-bottom: 20px;
+        }
+
+        .stats_container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat_box {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: 8px;
+        }
+
+        .stat_number {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat_label {
+            font-size: 14px;
+            color: var(--cor-texto-secundaria);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            width: 100%;
+            padding: 50px;
+            background: var(--cor-fundo-2);
+            border-top: 1px solid rgba(0, 102, 255, 0.2);
+            text-align: center;
+            color: var(--cor-texto-secundaria);
+        }
+
+        .footer_content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer_links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer_links a {
+            color: var(--cor-texto-secundaria);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer_links a:hover {
+            color: var(--cor-secundaria);
+        }
+
+        .footer_bottom {
+            font-size: 12px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        /* ============================================
+           RESPONSIVIDADE
+           ============================================ */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 15px 30px;
+            }
+
+            .menu_links {
+                gap: 20px;
+            }
+
+            .features_section,
+            .upload_section,
+            .about_section {
+                padding: 60px 30px;
+            }
+
+            .buttons_container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .menu_toggle {
+                display: flex;
+            }
+
+            .menu_links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .menu_links.active {
+                display: flex;
+            }
+
+            .container_hero {
+                margin-top: 60px;
+            }
+
+            .hero_content {
+                padding: 30px 15px;
+                border-radius: 15px;
+            }
+
+            .hero_title {
+                font-size: 32px;
+            }
+
+            .hero_subtitle {
+                font-size: 16px;
+            }
+
+            .buttons_container {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .btn {
+                min-width: 100%;
+                width: 100%;
+            }
+
+            .logo_image {
+                max-width: 200px;
+            }
+
+            .features_section,
+            .upload_section,
+            .about_section {
+                padding: 50px 20px;
+            }
+
+            .section_title {
+                font-size: 28px;
+                margin-bottom: 40px;
+            }
+
+            .upload_box {
+                padding: 40px 20px;
+            }
+
+            .upload_icon {
+                font-size: 48px;
+            }
+
+            .feature_card {
+                padding: 25px;
+            }
+
+            footer {
+                padding: 30px 20px;
+            }
+
+            .footer_links {
+                gap: 15px;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 12px 15px;
+            }
+
+            .logo_nav {
+                font-size: 18px;
+            }
+
+            .hero_content {
+                padding: 20px 15px;
+                border-radius: 12px;
+            }
+
+            .hero_title {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .hero_subtitle {
+                font-size: 14px;
+                margin-bottom: 25px;
+            }
+
+            .buttons_container {
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 13px;
+                min-width: auto;
+            }
+
+            .logo_image {
+                max-width: 150px;
+                margin-bottom: 20px;
+            }
+
+            .scroll_indicator {
+                bottom: 15px;
+            }
+
+            .features_grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature_card {
+                padding: 20px;
+            }
+
+            .feature_icon {
+                font-size: 36px;
+            }
+
+            .upload_box {
+                padding: 30px 15px;
+            }
+
+            .upload_icon {
+                font-size: 40px;
+            }
+
+            .result_badge {
+                font-size: 13px;
+                padding: 10px 20px;
+            }
+
+            .result_confidence {
+                font-size: 36px;
+            }
+
+            .section_title {
+                font-size: 22px;
+            }
+
+            .stats_container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 102, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--cor-secundaria);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ============================================
+         HEADER / NAVEGAÇÃO
+         ============================================ -->
+    <header>
+        <nav>
+            <!-- <div class="logo_nav">🔍 FAKENEWS</div> -->
+            <ul class="menu_links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#funciona">Como Funciona</a></li>
+                <li><a href="#verificar">Verificar</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============================================
+         SEÇÃO HERO - COM IMAGEM "VERDADE OU FARSA"
+         ============================================ -->
+    <section class="container_hero" id="inicio">
+        <div class="hero_content">
+           <!--  <div class="logo_image">🔍</div> -->
+
+            <h1 class="hero_title">FAKENEWS</h1>
+
+            <p class="hero_subtitle">
+                Descubra se uma imagem é um <span class="hero_highlight">deepfake</span> ou um <span class="hero_highlight">fato real</span>
+            </p>
+
+            <div class="buttons_container">
+                <button class="btn btn_primary" onclick="scrollToSection('#verificar')">
+                    🚀 Verificar Agora
+                </button>
+                <button class="btn btn_secondary" onclick="scrollToSection('#como-funciona')">
+                    ℹ️ Saiba Mais
+                </button>
+            </div>
+        </div>
+
+        <div class="scroll_indicator">👇</div>
+    </section>
+
+    
+    <!-- ============================================
+         SEÇÃO FEATURES / COMO FUNCIONA
+         ============================================ -->
+    <section class="features_section" id="como-funciona">
+        <h2 class="section_title">Como Funciona</h2>
+
+        <div class="features_grid">
+            <div class="feature_card">
+                <div class="feature_icon">📤</div>
+                <h3 class="feature_title">1. Faça Upload</h3>
+                <p class="feature_description">
+                    Envie a imagem que você deseja verificar. Suportamos JPG, PNG e outros formatos.
+                </p>
+            </div>
+
+            <div class="feature_card">
+                <div class="feature_icon">🧠</div>
+                <h3 class="feature_title">2. IA Analisa</h3>
+                <p class="feature_description">
+                    Nossa inteligência artificial avançada analisa os padrões e características da imagem.
+                </p>
+            </div>
+
+            <div class="feature_card">
+                <div class="feature_icon">⚡</div>
+                <h3 class="feature_title">3. Resultado Rápido</h3>
+                <p class="feature_description">
+                    Em segundos você recebe o resultado com confiança e detalhes técnicos.
+                </p>
+            </div>
+
+            <div class="feature_card">
+                <div class="feature_icon">✅</div>
+                <h3 class="feature_title">Preciso</h3>
+                <p class="feature_description">
+                    Taxas de acurácia acima de 95% em detecção de deepfakes.
+                </p>
+            </div>
+
+            <div class="feature_card">
+                <div class="feature_icon">🔒</div>
+                <h3 class="feature_title">Seguro</h3>
+                <p class="feature_description">
+                    Suas imagens são criptografadas e deletadas automaticamente após análise.
+                </p>
+            </div>
+
+            <div class="feature_card">
+                <div class="feature_icon">⚙️</div>
+                <h3 class="feature_title">Gratuito</h3>
+                <p class="feature_description">
+                    Use nossa ferramenta sem nenhum custo. Sem limitações de uso.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SEÇÃO UPLOAD
+         ============================================ -->
+    <section class="upload_section" id="verificar">
+        <h2 class="section_title">Verificar Imagem</h2>
+
+        <div class="upload_container">
+            <div class="upload_box" onclick="document.getElementById('fileInput').click()">
+                <div class="upload_icon">📸</div>
+                <p class="upload_text">Clique ou arraste sua imagem aqui</p>
+                <p class="upload_hint">JPG, PNG (máx. 10MB)</p>
+                <button class="file_input_btn" onclick="event.stopPropagation()">
+                    Escolher Arquivo
+                </button>
+            </div>
+
+            <input 
+                type="file" 
+                id="fileInput" 
+                accept="image/*"
+                onchange="handleFileSelect(event)"
+            >
+
+            <div class="preview_area" id="previewArea">
+                <img id="previewImage" class="preview_image" style="display: none;">
+            </div>
+
+            <button 
+                class="analyze_btn" 
+                id="analyzeBtn" 
+                onclick="analyzeImage()" 
+                disabled
+            >
+                🔍 Analisar Imagem
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SEÇÃO RESULTADOS
+         ============================================ -->
+    <section class="results_section" id="resultados">
+        <h2 class="section_title">Resultado da Análise</h2>
+
+        <div class="result_card">
+            <div class="result_header">
+                <div class="result_badge" id="resultBadge">
+                    Analisando...
+                </div>
+                <div class="result_confidence" id="resultConfidence">
+                    --
+                </div>
+                <p class="result_message" id="resultMessage">
+                    Analisando sua imagem...
+                </p>
+            </div>
+
+            <div class="result_details">
+                <div class="detail_item">
+                    <span class="detail_label">Classificação:</span>
+                    <span class="detail_value" id="detailClassification">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Nível de Confiança:</span>
+                    <span class="detail_value" id="detailConfidence">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Artefatos Detectados:</span>
+                    <span class="detail_value" id="detailArtefacts">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Processamento:</span>
+                    <span class="detail_value" id="detailProcessing">-</span>
+                </div>
+            </div>
+
+            <div class="confidence_bar">
+                <div class="confidence_fill" id="confidenceFill" style="width: 0%;"></div>
+            </div>
+
+            <button class="new_analysis_btn" onclick="resetAnalysis()">
+                🔄 Nova Análise
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SEÇÃO SOBRE
+         ============================================ -->
+    <section class="about_section" id="sobre">
+        <h2 class="section_title">Sobre FAKENEWS</h2>
+
+        <div class="about_content">
+            <p class="about_text">
+                FAKENEWS é uma plataforma inovadora criada para ajudar você a identificar deepfakes e manipulações de imagens. 
+                Em um mundo onde a desinformação visual é cada vez mais comum, nossa ferramenta utiliza inteligência artificial 
+                de ponta para detectar quando uma imagem foi artificialmente criada ou modificada.
+            </p>
+
+            <p class="about_text">
+                Nossa missão é democratizar o acesso à tecnologia de detecção de deepfakes, permitindo que qualquer pessoa 
+                verifique a autenticidade de imagens de forma rápida, fácil e segura. Acreditamos que a verdade importa, 
+                e queremos ajudá-lo a encontrá-la.
+            </p>
+
+            <div class="stats_container">
+                <div class="stat_box">
+                    <div class="stat_number">95%+</div>
+                    <div class="stat_label">Precisão</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">10K+</div>
+                    <div class="stat_label">Imagens Analisadas</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">24/7</div>
+                    <div class="stat_label">Disponível</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">100%</div>
+                    <div class="stat_label">Gratuito</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer>
+        <div class="footer_content">
+            <div class="footer_links">
+                <a href="#inicio">Início</a>
+                <a href="#como-funciona">Como Funciona</a>
+                <a href="#verificar">Verificar</a>
+                <a href="#sobre">Sobre</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+
+            <div class="footer_bottom">
+                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ========== Menu Mobile ==========
+        const menuToggle = document.querySelector('.menu_toggle');
+        const menuLinks = document.querySelector('.menu_links');
+
+        menuToggle.addEventListener('click', () => {
+            menuLinks.classList.toggle('active');
+        });
+
+        menuLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuLinks.classList.remove('active');
+            });
+        });
+
+        // ========== Scroll Suave ==========
+        function scrollToSection(selector) {
+            const element = document.querySelector(selector);
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== Upload de Arquivo ==========
+        let selectedFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            
+            if (file && file.type.startsWith('image/')) {
+                selectedFile = file;
+                
+                // Preview da imagem
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('previewImage');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    
+                    document.getElementById('analyzeBtn').disabled = false;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Por favor, selecione um arquivo de imagem válido.');
+            }
+        }
+
+        // Drag and Drop
+        const uploadBox = document.querySelector('.upload_box');
+
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = 'rgba(0, 102, 255, 0.15)';
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.style.background = 'rgba(0, 102, 255, 0.05)';
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = 'rgba(0, 102, 255, 0.05)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('fileInput').files = files;
+                handleFileSelect({ target: { files: files } });
+            }
+        });
+
+        // ========== Análise de Imagem ==========
+        function analyzeImage() {
+            if (!selectedFile) {
+                alert('Por favor, selecione uma imagem primeiro.');
+                return;
+            }
+
+            // Mostrar seção de resultados
+            document.getElementById('resultados').classList.add('active');
+            document.querySelector('.results_section').scrollIntoView({ behavior: 'smooth' });
+
+            // Simular análise
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<span class="loading"></span> Analisando...';
+
+            // Simular delay da análise
+            setTimeout(() => {
+                // Gerar resultado aleatório para demonstração
+                const isFake = Math.random() > 0.5;
+                const confidence = Math.floor(Math.random() * 30) + 70; // 70-100%
+
+                displayResult(isFake, confidence);
+
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '🔍 Analisar Imagem';
+            }, 2500);
+        }
+
+        function displayResult(isFake, confidence) {
+            const badge = document.getElementById('resultBadge');
+            const confidenceDisplay = document.getElementById('resultConfidence');
+            const message = document.getElementById('resultMessage');
+            const classification = document.getElementById('detailClassification');
+            const confidenceDetail = document.getElementById('detailConfidence');
+            const artefacts = document.getElementById('detailArtefacts');
+            const processing = document.getElementById('detailProcessing');
+            const confidenceFill = document.getElementById('confidenceFill');
+
+            if (isFake) {
+                badge.className = 'result_badge badge_fake';
+                badge.textContent = '⚠️ PROVÁVEL DEEPFAKE';
+                message.textContent = 'Esta imagem apresenta características consistentes com um deepfake.';
+                classification.textContent = 'Deepfake Detectado';
+                artefacts.textContent = 'Múltiplos artefatos encontrados';
+            } else {
+                badge.className = 'result_badge badge_real';
+                badge.textContent = '✅ PROVAVELMENTE REAL';
+                message.textContent = 'Esta imagem passou na verificação de autenticidade.';
+                classification.textContent = 'Imagem Autêntica';
+                artefacts.textContent = 'Nenhum artefato suspeito';
+            }
+
+            confidenceDisplay.textContent = confidence + '%';
+            confidenceDetail.textContent = confidence + '%';
+            processing.textContent = '245ms';
+            confidenceFill.style.width = confidence + '%';
+        }
+
+        function resetAnalysis() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('previewImage').style.display = 'none';
+            document.getElementById('analyzeBtn').disabled = true;
+            document.getElementById('resultados').classList.remove('active');
+            document.querySelector('.upload_section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== Efeito de Parallax (opcional) ==========
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.container_hero');
+            const scrollPosition = window.pageYOffset;
+            hero.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+        });
+    </script>
+
+</body>
+
+</html>

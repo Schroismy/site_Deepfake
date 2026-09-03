@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Verificar Imagem">
+    
+    <title>FAKENEWS - Verificar</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* ============================================
+           SEÇÃO UPLOAD
+           ============================================ */
+        .upload_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: linear-gradient(135deg, var(--cor-fundo-2) 0%, var(--cor-fundo) 100%);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload_container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .upload_box {
+            border: 2px dashed var(--cor-principal);
+            border-radius: 15px;
+            padding: 70px 40px;
+            text-align: center;
+            background: rgba(0, 102, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .upload_box:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--cor-secundaria);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .upload_icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .upload_box:hover .upload_icon {
+            transform: scale(1.2);
+        }
+
+        .upload_text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--cor-texto);
+            margin-bottom: 10px;
+        }
+
+        .upload_hint {
+            font-size: 14px;
+            color: var(--cor-texto-secundaria);
+            margin-bottom: 25px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file_input_btn {
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .file_input_btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        .preview_area {
+            margin-top: 30px;
+        }
+
+        .preview_image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .analyze_btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .analyze_btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.4);
+        }
+
+        .analyze_btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ============================================
+           SEÇÃO RESULTADOS
+           ============================================ */
+        .results_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: var(--cor-fundo-2);
+            display: none;
+            min-height: calc(100vh - 70px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results_section.active {
+            display: flex;
+        }
+
+        .result_card {
+            max-width: 800px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(255, 0, 85, 0.04) 100%);
+            border: 2px solid rgba(0, 102, 255, 0.3);
+            border-radius: 15px;
+            padding: 50px;
+        }
+
+        .result_header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result_badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .badge_fake {
+            background: rgba(255, 51, 102, 0.25);
+            color: #ff3366;
+            border: 2px solid #ff3366;
+        }
+
+        .badge_real {
+            background: rgba(0, 255, 136, 0.25);
+            color: #00ff88;
+            border: 2px solid #00ff88;
+        }
+
+        .result_confidence {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result_message {
+            font-size: 18px;
+            color: var(--cor-texto-secundaria);
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .result_details {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .detail_item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .detail_item:last-child {
+            border-bottom: none;
+        }
+
+        .detail_label {
+            color: var(--cor-texto-secundaria);
+            font-weight: 700;
+        }
+
+        .detail_value {
+            color: var(--cor-secundaria);
+            font-weight: 800;
+        }
+
+        .confidence_bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(0, 102, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 25px 0;
+        }
+
+        .confidence_fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+            transition: width 1.2s ease-out;
+            width: 0%;
+        }
+
+        .new_analysis_btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 25px;
+        }
+
+        .new_analysis_btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--cor-secundaria);
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .upload_section,
+            .results_section {
+                padding: 60px 20px;
+            }
+
+            .upload_box {
+                padding: 50px 25px;
+            }
+
+            .upload_icon {
+                font-size: 55px;
+            }
+
+            .result_card {
+                padding: 30px 20px;
+            }
+
+            .result_confidence {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="funciona.html">Como Funciona</a></li>
+                <li><a href="verificar.html">Verificar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SEÇÃO UPLOAD -->
+    <section class="upload_section" id="verificar">
+        <div class="upload_container">
+            <div class="upload_box" id="uploadBox">
+                <div class="upload_icon">📸</div>
+                <div class="upload_text">Clique ou arraste a imagem aqui</div>
+                <div class="upload_hint">PNG, JPG, GIF até 10MB</div>
+                <button class="file_input_btn" onclick="document.getElementById('fileInput').click()">
+                    📁 Escolher Arquivo
+                </button>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+            </div>
+
+            <div class="preview_area">
+                <img id="previewImage" class="preview_image">
+                <button class="analyze_btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
+                    🔍 Analisar Imagem
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO RESULTADOS -->
+    <section class="results_section" id="resultados">
+        <div class="result_card">
+            <div class="result_header">
+                <div class="result_badge" id="resultBadge">
+                    ⚠️ ANALISANDO...
+                </div>
+
+                <div class="result_confidence" id="resultConfidence">
+                    --
+                </div>
+
+                <p class="result_message" id="resultMessage">
+                    Analisando a imagem com IA avançada...
+                </p>
+            </div>
+
+            <div class="result_details">
+                <div class="detail_item">
+                    <span class="detail_label">Classificação:</span>
+                    <span class="detail_value" id="detailClassification">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Confiança:</span>
+                    <span class="detail_value" id="detailConfidence">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Artefatos:</span>
+                    <span class="detail_value" id="detailArtefacts">-</span>
+                </div>
+                <div class="detail_item">
+                    <span class="detail_label">Tempo:</span>
+                    <span class="detail_value" id="detailProcessing">-</span>
+                </div>
+            </div>
+
+            <div class="confidence_bar">
+                <div class="confidence_fill" id="confidenceFill"></div>
+            </div>
+
+            <button class="new_analysis_btn" onclick="resetAnalysis()">
+                🔄 Nova Análise
+            </button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+<!--     <footer>
+        <div class="footer_content">
+            <div class="footer_links">
+                <a href="index.html">Início</a>
+                <a href="como-funciona.html">Como Funciona</a>
+                <a href="verificar.html">Verificar</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+
+            <div class="footer_bottom">
+                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="menu.js"></script> -->
+    <script src="verificar.js"></script>
+</body>
+
+</html>

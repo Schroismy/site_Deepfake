@@ -1,0 +1,384 @@
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Plataforma para verificar se uma imagem é um deepfake ou é real">
+    <meta name="theme-color" content="#0066ff">
+
+    <title>FAKENEWS - Verificador de Deepfakes | Verdade ou Farsa?</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* Background com imagem "VERDADE OU FARSA" */
+        .container_hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('C:\\Users\\Schroeder\\Downloads\\deepfake_fakenes.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -2;
+        }
+
+        .hero_content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 102, 255, 0.3),
+                inset 0 0 50px rgba(0, 212, 255, 0.1);
+        }
+
+        /* ============================================
+    SEÇÃO HERO - COM IMAGEM DE FUNDO
+    ============================================ */
+        .container_hero {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER / NAVEGAÇÃO -->
+    <!-- <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="funciona.html">Como Funciona</a></li>
+                <li><a href="verificar.html">Verificar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <section class="container_hero" id="inicio">
+        <div class="hero_content">
+            <!--  <div class="logo_image">🔍</div> -->
+
+            <<!-- h1 class="hero_title">FAKENEWS</h1>
+
+            <p class="hero_subtitle">
+                Descubra se uma imagem é um <span class="hero_highlight">deepfake</span> ou um <span
+                    class="hero_highlight">fato
+                    real</span>
+            </p>
+
+            <div class="buttons_container">
+                <button class="btn btn_primary" onclick="scrollToSection('#verificar')">
+                    🚀 Verificar Agora
+                </button>
+                <button class="btn btn_secondary" onclick="scrollToSection('#como-funciona')">
+                    ℹ️ Saiba Mais
+                </button>
+            </div>
+        </div>
+
+        <div class="scroll_indicator">👇</div>
+    </section> -->
+    <!-- HERO SECTION -->
+    <!-- <section class="container_hero" id="inicio">
+        <div class="hero_content">
+            <h1 class="hero_title">FAKENEWS</h1>
+            <p class="hero_subtitle">Verdade ou Farsa?</p>
+            <p class="hero_description">Descubra se uma imagem é um deepfake ou um fato real</p>
+
+            <div class="buttons_container">
+                <a href="verificar.html" class="btn btn_primary">
+                    🚀 Verificar Agora
+                </a>
+                <a href="funciona.html" class="btn btn_secondary">
+                    ℹ️ Saiba Mais
+                </a>
+            </div>
+        </div>
+
+        <div class="scroll_indicator">👇</div>
+    </section>
+</body>
+
+</html> --> --> -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Plataforma para verificar se uma imagem é um deepfake ou é real">
+    <meta name="theme-color" content="#0066ff">
+    
+    <title>FAKENEWS - Verificador de Deepfakes | Verdade ou Farsa?</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* ============================================
+           SEÇÃO HERO - IMAGEM FULLSCREEN (sem conteúdo)
+           ============================================ */
+        .hero_image {
+            width: 100%;
+            height: 100vh;
+            background-image: url('deepfake_fakenes.jpg');
+            background-image: url('C:\\Users\\Schroeder\\Downloads\\deepfake_fakenes.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+            margin-top: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay escuro para legibilidade */
+        .hero_image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(10, 10, 10, 0.3) 0%, rgba(10, 10, 10, 0.7) 100%);
+            z-index: 1;
+        }
+
+        /* Seta/indicador para scrollar */
+        .scroll_indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            font-size: 32px;
+            z-index: 2;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* ============================================
+           SEÇÃO DE CONTEÚDO (depois de scrollar)
+           ============================================ */
+        .hero_content_section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 50px;
+            background: linear-gradient(135deg, var(--cor-fundo-2) 0%, var(--cor-fundo) 100%);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero_content {
+            text-align: center;
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 60px 40px;
+            box-shadow: 0 0 50px rgba(0, 102, 255, 0.3),
+                        inset 0 0 50px rgba(0, 212, 255, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero_title {
+            font-size: clamp(40px, 12vw, 80px);
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+        }
+
+        .hero_description {
+            font-size: 18px;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .hero_highlight {
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        .buttons_container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn_primary {
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .btn_primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 45px rgba(0, 102, 255, 0.6);
+        }
+
+        .btn_secondary {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+
+        .btn_secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-4px);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .hero_image {
+                height: 100vh;
+                margin-top: 60px;
+            }
+
+            .hero_content_section {
+                padding: 60px 20px;
+            }
+
+            .hero_content {
+                padding: 40px 20px;
+            }
+
+            .buttons_container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER / NAVEGAÇÃO -->
+    <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="funciona.html">Como Funciona</a></li>
+                <li><a href="verificar.html">Verificar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SEÇÃO 1: IMAGEM FULLSCREEN (sem conteúdo) -->
+    <section class="hero_image" id="inicio">
+        <div class="scroll_indicator">👇</div>
+    </section>
+
+    <!-- SEÇÃO 2: CONTEÚDO (FAKENEWS + botões) -->
+    <section class="hero_content_section">
+        <div class="hero_content">
+            <h1 class="hero_title">FAKENEWS</h1>
+
+            <p class="hero_description">
+                Descubra se a informação é um <span class="hero_highlight">deepfake</span> ou um <span class="hero_highlight">fato real</span>
+            </p>
+
+            <div class="buttons_container">
+                <a href="verificar.html" class="btn btn_primary">
+                    🚀 Verificar Agora
+                </a>
+                <a href="funciona.html" class="btn btn_secondary">
+                    ℹ️ Saiba Mais
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+<!--     <footer>
+        <div class="footer_content">
+            <div class="footer_links">
+                <a href="index.html">Início</a>
+                <a href="funciona.html">Como Funciona</a>
+                <a href="verificar.html">Verificar</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+
+            <div class="footer_bottom">
+                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
+            </div>
+        </div>
+    </footer> -->
+
+    <script src="menu.js"></script>
+</body>
+
+</html>

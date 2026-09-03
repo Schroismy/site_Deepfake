@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Como Funciona">
+    
+    <title>FAKENEWS - Como Funciona</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* ============================================
+           SEÇÃO COMO FUNCIONA - 6 CARDS
+           ============================================ */
+        .features_section {
+            width: 100%;
+            padding: 100px 50px;
+            background-color: var(--cor-fundo);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section_title {
+            text-align: center;
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: 70px;
+            color: var(--cor-texto);
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .section_title span {
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .feature_card {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(255, 0, 85, 0.05) 100%);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .feature_card:hover {
+            border-color: var(--cor-secundaria);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(255, 0, 85, 0.08) 100%);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .feature_icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature_card:hover .feature_icon {
+            transform: scale(1.15);
+        }
+
+        .feature_title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--cor-texto);
+        }
+
+        .feature_description {
+            font-size: 14px;
+            color: var(--cor-texto-secundaria);
+            line-height: 1.8;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .features_section {
+                padding: 60px 20px;
+            }
+
+            .features_grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .section_title {
+                margin-bottom: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="funciona.html">Como Funciona</a></li>
+                <li><a href="verificar.html">Verificar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SEÇÃO COMO FUNCIONA -->
+    <section class="features_section" id="funciona">
+        <h1 class="section_title">Como <span>Funciona</span></h1>
+
+        <div class="features_grid">
+            <!-- Card 1 -->
+            <div class="feature_card">
+                <div class="feature_icon">📸</div>
+                <h3 class="feature_title">1. Envie a Imagem</h3>
+                <p class="feature_description">
+                    Clique ou arraste uma imagem para nossa plataforma. Aceitamos todos os formatos de imagem comuns.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature_card">
+                <div class="feature_icon">🤖</div>
+                <h3 class="feature_title">2. IA Analisa</h3>
+                <p class="feature_description">
+                    Nossa inteligência artificial de ponta examina a imagem procurando padrões suspeitos.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature_card">
+                <div class="feature_icon">🔍</div>
+                <h3 class="feature_title">3. Detecta Anomalias</h3>
+                <p class="feature_description">
+                    Identificamos sinais de manipulação, deepfakes, filtros e edições questionáveis.
+                </p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="feature_card">
+                <div class="feature_icon">📊</div>
+                <h3 class="feature_title">4. Análise Profunda</h3>
+                <p class="feature_description">
+                    Realizamos análise em camadas com múltiplos algoritmos para maior precisão.
+                </p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="feature_card">
+                <div class="feature_icon">⚡</div>
+                <h3 class="feature_title">5. Resultado Rápido</h3>
+                <p class="feature_description">
+                    Receba o resultado em questão de segundos, não minutos ou horas.
+                </p>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="feature_card">
+                <div class="feature_icon">✅</div>
+                <h3 class="feature_title">6. Resultado Claro</h3>
+                <p class="feature_description">
+                    Veja claramente se é REAL ou DEEPFAKE com porcentagem de confiança.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <!-- <footer>
+        <div class="footer_content">
+            <div class="footer_links">
+                <a href="index.html">Início</a>
+                <a href="funciona.html">Como Funciona</a>
+                <a href="verificar.html">Verificar</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+
+            <div class="footer_bottom">
+                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="menu.js"></script> -->
+</body>
+
+</html>

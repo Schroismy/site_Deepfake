@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Sobre">
+    
+    <title>FAKENEWS - Sobre</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* ============================================
+           SEÇÃO SOBRE
+           ============================================ */
+        .about_section {
+            width: 100%;
+            padding: 100px 50px;
+            background-color: var(--cor-fundo);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about_content {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .section_title {
+            text-align: center;
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: 50px;
+            color: var(--cor-texto);
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .section_title span {
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about_text {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--cor-texto-secundaria);
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .stats_container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .stat_box {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(255, 0, 85, 0.08) 100%);
+            border: 1px solid rgba(0, 102, 255, 0.25);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat_box:hover {
+            border-color: var(--cor-secundaria);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat_number {
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .stat_label {
+            font-size: 13px;
+            color: var(--cor-texto-secundaria);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .about_section {
+                padding: 60px 20px;
+            }
+
+            .section_title {
+                margin-bottom: 40px;
+            }
+
+            .about_text {
+                text-align: left;
+            }
+
+            .stats_container {
+                gap: 20px;
+                margin-top: 50px;
+            }
+
+            .stat_box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="funciona.html">Como Funciona</a></li>
+                <li><a href="verificar.html">Verificar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SEÇÃO SOBRE -->
+    <section class="about_section" id="sobre">
+        <div class="about_content">
+            <h1 class="section_title">Sobre <span>FAKENEWS</span></h1>
+
+            <p class="about_text">
+                FAKENEWS é uma plataforma inovadora criada para ajudar você a identificar deepfakes e manipulações de imagens. 
+                Em um mundo onde a desinformação visual é cada vez mais comum, nossa ferramenta utiliza inteligência artificial 
+                de ponta para detectar quando uma imagem foi artificialmente criada ou modificada.
+            </p>
+
+            <p class="about_text">
+                Nossa missão é democratizar o acesso à tecnologia de detecção de deepfakes, permitindo que qualquer pessoa 
+                verifique a autenticidade de imagens de forma rápida, fácil e segura. Acreditamos que a verdade importa, 
+                e queremos ajudá-lo a encontrá-la.
+            </p>
+
+            <p class="about_text">
+                Com uma equipe dedicada de especialistas em inteligência artificial, visão computacional e cibersegurança,
+                continuamos evoluindo nossa tecnologia para detectar os deepfakes mais avançados. Cada análise é realizada
+                com os mais altos padrões de privacidade e segurança de dados.
+            </p>
+
+            <div class="stats_container">
+                <div class="stat_box">
+                    <div class="stat_number">95%+</div>
+                    <div class="stat_label">Precisão</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">10K+</div>
+                    <div class="stat_label">Imagens Analisadas</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">24/7</div>
+                    <div class="stat_label">Disponível</div>
+                </div>
+
+                <div class="stat_box">
+                    <div class="stat_number">100%</div>
+                    <div class="stat_label">Gratuito</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+<!--     <footer>
+        <div class="footer_content">
+            <div class="footer_links">
+                <a href="index.html">Início</a>
+                <a href="funciona.html">Como Funciona</a>
+                <a href="verificar.html">Verificar</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+
+            <div class="footer_bottom">
+                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="menu.js"></script> -->
+</body>
+
+</html>
