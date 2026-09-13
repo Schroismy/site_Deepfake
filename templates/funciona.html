@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAKENEWS - Como Funciona">
+    
+    <title>FAKENEWS - Como Funciona</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    <style>
+        /* ============================================
+           SEÇÃO COMO FUNCIONA
+           ============================================ */
+        .how_it_works_section {
+            width: 100%;
+            padding: 100px 50px;
+            background: linear-gradient(135deg, var(--cor-fundo-2) 0%, var(--cor-fundo) 100%);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .how_it_works_content {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .section_title {
+            text-align: center;
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: 60px;
+            color: var(--cor-texto);
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .section_title span {
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .steps_container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step_box {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(255, 0, 85, 0.08) 100%);
+            border: 1px solid rgba(0, 102, 255, 0.25);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step_box::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--cor-principal), var(--cor-secundaria));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 28px;
+        }
+
+        .step_box:nth-child(1)::before {
+            content: '1️⃣';
+        }
+
+        .step_box:nth-child(2)::before {
+            content: '2️⃣';
+        }
+
+        .step_box:nth-child(3)::before {
+            content: '3️⃣';
+        }
+
+        .step_box:hover {
+            border-color: var(--cor-secundaria);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .step_title {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--cor-texto);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .step_description {
+            font-size: 15px;
+            color: var(--cor-texto-secundaria);
+            line-height: 1.7;
+        }
+
+        .technology_section {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid rgba(0, 102, 255, 0.3);
+            border-radius: 15px;
+            padding: 50px 40px;
+            margin-top: 60px;
+        }
+
+        .tech_title {
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 900;
+            color: var(--cor-texto);
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+        }
+
+        .tech_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tech_item {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .tech_icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .tech_name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cor-texto);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .how_it_works_section {
+                padding: 60px 20px;
+            }
+
+            .section_title {
+                margin-bottom: 40px;
+            }
+
+            .steps_container {
+                gap: 20px;
+            }
+
+            .technology_section {
+                padding: 30px 20px;
+            }
+
+            .tech_grid {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo_nav">FAKENEWS</div>
+            <ul class="menu_links">
+                <li><a href="{{ url_for('index') }}">Início</a></li>
+                <li><a href="{{ url_for('funciona') }}">Como Funciona</a></li>
+                <li><a href="{{ url_for('verificar') }}">Verificar</a></li>
+                <li><a href="{{ url_for('sobre') }}">Sobre</a></li>
+            </ul>
+            <div class="menu_toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SEÇÃO COMO FUNCIONA -->
+    <section class="how_it_works_section" id="funciona">
+        <div class="how_it_works_content">
+            <h1 class="section_title">Como <span>Funciona</span></h1>
+
+            <div class="steps_container">
+                <div class="step_box">
+                    <h3 class="step_title">Enviar Imagem</h3>
+                    <p class="step_description">
+                        Faça upload de uma imagem que deseja verificar. Aceita formatos PNG, JPG e GIF.
+                    </p>
+                </div>
+
+                <div class="step_box">
+                    <h3 class="step_title">Análise de IA</h3>
+                    <p class="step_description">
+                        Nossa inteligência artificial analisa padrões pixelares, artefatos digitais e inconsistências.
+                    </p>
+                </div>
+
+                <div class="step_box">
+                    <h3 class="step_title">Resultado</h3>
+                    <p class="step_description">
+                        Você recebe um veredito com confiança e explicação técnica sobre a autenticidade.
+                    </p>
+                </div>
+            </div>
+
+            <div class="technology_section">
+                <h2 class="tech_title">Tecnologias Utilizadas</h2>
+                <div class="tech_grid">
+                    <div class="tech_item">
+                        <div class="tech_icon">🤖</div>
+                        <div class="tech_name">Redes Neurais</div>
+                    </div>
+                    <div class="tech_item">
+                        <div class="tech_icon">📊</div>
+                        <div class="tech_name">Análise FFT</div>
+                    </div>
+                    <div class="tech_item">
+                        <div class="tech_icon">🔍</div>
+                        <div class="tech_name">Visão Computacional</div>
+                    </div>
+                    <div class="tech_item">
+                        <div class="tech_icon">⚡</div>
+                        <div class="tech_name">Machine Learning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+</body>
+
+</html>

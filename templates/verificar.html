@@ -7,7 +7,7 @@
     <meta name="description" content="FAKENEWS - Verificar Imagem">
     
     <title>FAKENEWS - Verificar</title>
-    <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
     <style>
         /* ============================================
            SEÇÃO UPLOAD
@@ -312,10 +312,10 @@
         <nav>
             <div class="logo_nav">FAKENEWS</div>
             <ul class="menu_links">
-                <li><a href="index.html">Início</a></li>
-                <li><a href="funciona.html">Como Funciona</a></li>
-                <li><a href="verificar.html">Verificar</a></li>
-                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="{{ url_for('index') }}">Início</a></li>
+                <li><a href="{{ url_for('funciona') }}">Como Funciona</a></li>
+                <li><a href="{{ url_for('verificar') }}">Verificar</a></li>
+                <li><a href="{{ url_for('sobre') }}">Sobre</a></li>
             </ul>
             <div class="menu_toggle">
                 <span></span>
@@ -393,26 +393,7 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-<!--     <footer>
-        <div class="footer_content">
-            <div class="footer_links">
-                <a href="index.html">Início</a>
-                <a href="como-funciona.html">Como Funciona</a>
-                <a href="verificar.html">Verificar</a>
-                <a href="sobre.html">Sobre</a>
-                <a href="#">Privacidade</a>
-                <a href="#">Contato</a>
-            </div>
-
-            <div class="footer_bottom">
-                <p>&copy; 2026 FAKENEWS - Todos os direitos reservados. | Desenvolvido com ❤️ por César Schroeder</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="menu.js"></script> -->
-    <script src="verificar.js"></script>
+    <script src="{{ url_for('static', filename='js/verificar.js') }}"></script>
 </body>
 
 </html>
